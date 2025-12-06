@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Schallrechner – Wärmepumpen</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,20 +49,30 @@
     <input type="number" id="distance" value="5">
 </label>
 
-<button type="button" onclick="calculate()">Berechnen</button>
+<button type="button" id="calculateBtn">Berechnen</button>
 
 <div id="result"></div>
 
 <script>
-function calculate() {
-    const Lw = parseFloat(document.getElementById("lw").value);
-    const r  = parseFloat(document.getElementById("distance").value);
+// Warten, bis die Seite geladen ist
+document.addEventListener("DOMContentLoaded", function() {
+    const btn = document.getElementById("calculateBtn");
+    btn.addEventListener("click", function() {
+        const Lw = parseFloat(document.getElementById("lw").value);
+        const r  = parseFloat(document.getElementById("distance").value);
 
-    if (r <= 0 || isNaN(Lw) || isNaN(r)) {
-        document.getElementById("result").innerHTML = "Bitte gültige Werte eingeben.";
-        return;
-    }
+        if (r <= 0 || isNaN(Lw) || isNaN(r)) {
+            document.getElementById("result").innerHTML = "Bitte gültige Werte eingeben.";
+            return;
+        }
 
-    // Schallabnahme nach Kugelausbreitung:
-    // Lp(r) = Lw - 20*log10(r) - 11
-    const Lp = Lw - 20 * Math.log10(r) -*
+        const Lp = Lw - 20 * Math.log10(r) - 11;
+
+        document.getElementById("result").innerHTML =
+            "Schalldruckpegel in " + r + " m: <b>" + Lp.toFixed(1) + " dB(A)</b>";
+    });
+});
+</script>
+
+</body>
+</html>
