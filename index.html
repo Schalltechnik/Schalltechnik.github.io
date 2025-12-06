@@ -11,7 +11,7 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 650px;
+  max-width: 800px;
   margin: 40px auto;
   padding: 20px;
   line-height: 1.6;
@@ -40,8 +40,38 @@ h2 {
   font-size: 15px;
 }
 
+.section {
+  margin-bottom: 35px;
+  padding: 25px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #4a7c3b;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #4a7c3b;
+  color: white;
+  border-radius: 50%;
+  font-size: 16px;
+}
+
 .input-group {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 label {
@@ -52,23 +82,58 @@ label {
   font-size: 15px;
 }
 
-input {
+input, select {
   width: 100%;
   padding: 12px;
   border: 2px solid #e0e0e0;
   border-radius: 6px;
   font-size: 16px;
   transition: border-color 0.3s;
+  background: white;
 }
 
-input:focus {
+input:focus, select:focus {
   outline: none;
   border-color: #4a7c3b;
 }
 
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: white;
+}
+
+.radio-option:hover {
+  border-color: #4a7c3b;
+  background: #f0f7ed;
+}
+
+.radio-option input[type="radio"] {
+  width: auto;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.radio-option.selected {
+  border-color: #4a7c3b;
+  background: #f0f7ed;
+}
+
 button {
   width: 100%;
-  padding: 14px;
+  padding: 16px;
   font-size: 18px;
   font-weight: 600;
   color: white;
@@ -91,10 +156,6 @@ button:active {
 
 #result {
   margin-top: 30px;
-  padding: 20px;
-  border-radius: 8px;
-  font-size: 18px;
-  text-align: center;
   display: none;
 }
 
@@ -102,117 +163,457 @@ button:active {
   display: block;
 }
 
-.result-value {
-  font-size: 32px;
+.result-section {
+  padding: 25px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.result-header {
+  font-size: 22px;
   font-weight: bold;
-  margin: 15px 0;
+  text-align: center;
+  margin-bottom: 20px;
   color: #333;
 }
 
-.threshold-info {
-  margin-top: 15px;
-  padding: 15px;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 600;
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-.threshold-below {
+.result-item {
+  background: white;
+  padding: 15px;
+  border-radius: 6px;
+  border: 2px solid #e0e0e0;
+}
+
+.result-label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.result-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.comparison-box {
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.comparison-below {
   background-color: #d4edda;
   color: #155724;
   border: 2px solid #c3e6cb;
 }
 
-.threshold-above {
+.comparison-above {
   background-color: #f8d7da;
   color: #721c24;
   border: 2px solid #f5c6cb;
+}
+
+.info-box {
+  background: #e7f3ff;
+  border: 2px solid #b3d9ff;
+  border-radius: 6px;
+  padding: 15px;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #004085;
+}
+
+.help-text {
+  font-size: 13px;
+  color: #666;
+  margin-top: 5px;
+  font-style: italic;
 }
 
 .error {
   background-color: #fff3cd;
   border: 2px solid #ffc107;
   color: #856404;
-}
-
-.info-text {
-  font-size: 14px;
-  color: #666;
-  margin-top: 10px;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
 }
 </style>
 </head>
 <body>
 <div class="container">
   <h2>🔊 Schallrechner für Wärmepumpen</h2>
-  <p class="description">Berechnung des Schalldruckpegels (Lp) in Abhängigkeit von der Entfernung</p>
+  <p class="description">Berechnung der Lärmimmissionen nach TA Lärm (Tiroler Verordnung TGHKV 2014)</p>
   
-  <div class="input-group">
-    <label for="lw">
-      Schallleistungspegel der Wärmepumpe (Lw) in dB(A):
-    </label>
-    <input type="number" id="lw" value="60" step="0.1" min="0" max="120">
+  <!-- Section 1: Heat Pump Data -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-number">1</span>
+      Angaben zur Luft-Wärmepumpe
+    </div>
+    
+    <div class="input-group">
+      <label for="lw_day">Max. Schallleistungspegel Tagbetrieb (dB(A)):</label>
+      <input type="number" id="lw_day" value="60" step="0.1" min="0" max="120">
+    </div>
+
+    <div class="input-group">
+      <label for="lw_night">Max. Schallleistungspegel schallreduzierter Betrieb (dB(A)):</label>
+      <input type="number" id="lw_night" value="55" step="0.1" min="0" max="120">
+      <div class="help-text">Für Nachtbetrieb</div>
+    </div>
+
+    <div class="input-group">
+      <label>Zuschlag für Tonhaltigkeit (Tagbetrieb):</label>
+      <select id="tone_day">
+        <option value="0">nicht hörbar (0 dB)</option>
+        <option value="3">hörbar (+3 dB)</option>
+        <option value="6">stark hörbar (+6 dB)</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label>Zuschlag für Tonhaltigkeit (Nachtbetrieb):</label>
+      <select id="tone_night">
+        <option value="0">nicht hörbar (0 dB)</option>
+        <option value="3">hörbar (+3 dB)</option>
+        <option value="6">stark hörbar (+6 dB)</option>
+      </select>
+    </div>
   </div>
 
-  <div class="input-group">
-    <label for="distance">
-      Abstand zwischen Wärmepumpe und Grundgrenze (Meter):
-    </label>
-    <input type="number" id="distance" value="5" step="0.1" min="0.1" max="1000">
+  <!-- Section 2: Sensitivity Level -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-number">2</span>
+      Immissionsrichtwert gemäß TGHKV
+    </div>
+    
+    <div class="input-group">
+      <label>Empfindlichkeitsstufe:</label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="sensitivity" value="kategorie1" checked>
+          <span>Kategorie 1 (Tag: 40 dB / Abend: 35 dB / Nacht: 30 dB)</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="sensitivity" value="kategorie2">
+          <span>Kategorie 2 (Tag: 45 dB / Abend: 40 dB / Nacht: 35 dB)</span>
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="sensitivity" value="kategorie3">
+          <span>Kategorie 3 (Tag: 50 dB / Abend: 45 dB / Nacht: 40 dB)</span>
+        </label>
+      </div>
+    </div>
   </div>
 
-  <button type="button" id="calculateBtn">Berechnen</button>
+  <!-- Section 3: Installation Setup -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-number">3</span>
+      Aufstellung
+    </div>
+    
+    <div class="input-group">
+      <label>Raumwinkelmaß K₀:</label>
+      <select id="k0">
+        <option value="3">WP frei aufgestellt, keine Wand näher als 3 m (+3 dB)</option>
+        <option value="6">WP an einer Wand, Abstand bis zu 3 m (+6 dB)</option>
+        <option value="9">WP in einer Ecke, Abstand jeweils bis zu 3 m (+9 dB)</option>
+        <option value="9">WP zwischen zwei Wänden, Abstand bis zu 5 m (+9 dB)</option>
+        <option value="9">WP unter einem Vordach, Höhe bis zu 5m (+9 dB)</option>
+      </select>
+      <div class="help-text">Aufstellungssituation der Wärmepumpe</div>
+      <div id="k0-diagram" style="margin-top: 15px; padding: 15px; background: white; border: 2px solid #e0e0e0; border-radius: 6px;">
+        <!-- Diagram will be inserted here by JavaScript -->
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="distance">Distanz (s) Quelle - Empfänger (Meter):</label>
+      <input type="number" id="distance" value="5" step="0.1" min="0.1" max="1000">
+      <div class="help-text">Abstand zwischen Wärmepumpe und maßgeblichem Immissionsort</div>
+    </div>
+  </div>
+
+  <button type="button" id="calculateBtn">Berechnung durchführen</button>
 
   <div id="result"></div>
+
+  <div class="info-box">
+    <strong>Hinweis:</strong> Die Ergebnisse basieren auf dem überschlägigen Prognoseverfahren der TA Lärm. 
+    Im Falle eines Nachbarschaftsstreits kann dies kein individuelles Schallgutachten ersetzen.
+  </div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   const btn = document.getElementById("calculateBtn");
-  const lwInput = document.getElementById("lw");
-  const distanceInput = document.getElementById("distance");
   const resultDiv = document.getElementById("result");
-  const THRESHOLD = 30;
+
+  // Add visual feedback for radio selections
+  document.querySelectorAll('.radio-option').forEach(option => {
+    option.addEventListener('click', function() {
+      const radio = this.querySelector('input[type="radio"]');
+      radio.checked = true;
+      
+      document.querySelectorAll('.radio-option').forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      this.classList.add('selected');
+    });
+  });
+
+  // Set initial selected state
+  document.querySelector('input[name="sensitivity"]:checked').closest('.radio-option').classList.add('selected');
+
+  // K0 diagram update function
+  function updateK0Diagram() {
+    const k0Select = document.getElementById('k0');
+    const diagramDiv = document.getElementById('k0-diagram');
+    const selectedIndex = k0Select.selectedIndex;
+    
+    const diagrams = [
+      // Free standing (+3 dB)
+      `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
+        <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">Frei aufgestellt (+3 dB)</text>
+        <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
+        <text x="150" y="195" text-anchor="middle" font-size="12" fill="#666">Boden</text>
+        <rect x="125" y="110" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
+        <text x="150" y="145" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
+        <circle cx="150" cy="140" r="3" fill="#ffeb3b"/>
+        <path d="M 150 140 L 110 100 M 150 140 L 190 100 M 150 140 L 110 180 M 150 140 L 190 180" 
+              stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3"/>
+        <text x="150" y="65" text-anchor="middle" font-size="11" fill="#666">Abstand > 3m zu allen Wänden</text>
+      </svg>`,
+      
+      // At wall (+6 dB)
+      `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
+        <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">An einer Wand (+6 dB)</text>
+        <rect x="30" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
+        <text x="20" y="115" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-90 20 115)">Wand</text>
+        <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
+        <text x="150" y="195" text-anchor="middle" font-size="12" fill="#666">Boden</text>
+        <rect x="50" y="110" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
+        <text x="75" y="145" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
+        <circle cx="75" cy="140" r="3" fill="#ffeb3b"/>
+        <path d="M 75 140 L 115 100 M 75 140 L 115 180 M 75 140 L 35 110 M 75 140 L 35 170" 
+              stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3"/>
+        <line x1="75" y1="100" x2="75" y2="85" stroke="#d32f2f" stroke-width="2" marker-end="url(#arrowhead)"/>
+        <line x1="40" y1="100" x2="40" y2="85" stroke="#d32f2f" stroke-width="2" marker-start="url(#arrowhead)"/>
+        <text x="57" y="80" text-anchor="middle" font-size="10" fill="#d32f2f">≤ 3m</text>
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+            <polygon points="0 0, 10 5, 0 10" fill="#d32f2f"/>
+          </marker>
+        </defs>
+      </svg>`,
+      
+      // In corner (+9 dB)
+      `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
+        <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">In einer Ecke (+9 dB)</text>
+        <rect x="30" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
+        <rect x="40" y="50" width="80" height="10" fill="#999" stroke="#666" stroke-width="2"/>
+        <text x="20" y="115" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-90 20 115)">Wand</text>
+        <text x="80" y="45" text-anchor="middle" font-size="11" fill="#666">Wand</text>
+        <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
+        <text x="150" y="195" text-anchor="middle" font-size="12" fill="#666">Boden</text>
+        <rect x="50" y="70" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
+        <text x="75" y="105" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
+        <circle cx="75" cy="100" r="3" fill="#ffeb3b"/>
+        <path d="M 75 100 L 115 80 M 75 100 L 115 120 M 75 100 L 35 60 M 75 100 L 55 60" 
+              stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3"/>
+        <text x="150" y="160" text-anchor="middle" font-size="10" fill="#666">Abstand zu beiden Wänden ≤ 3m</text>
+      </svg>`,
+      
+      // Between two walls (+9 dB)
+      `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
+        <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">Zwischen zwei Wänden (+9 dB)</text>
+        <rect x="30" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
+        <rect x="220" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
+        <text x="20" y="115" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-90 20 115)">Wand</text>
+        <text x="240" y="115" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-90 240 115)">Wand</text>
+        <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
+        <text x="150" y="195" text-anchor="middle" font-size="12" fill="#666">Boden</text>
+        <rect x="125" y="110" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
+        <text x="150" y="145" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
+        <circle cx="150" cy="140" r="3" fill="#ffeb3b"/>
+        <path d="M 150 140 L 110 100 M 150 140 L 190 100 M 150 140 L 110 180 M 150 140 L 190 180" 
+              stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3"/>
+        <line x1="40" y1="65" x2="60" y2="65" stroke="#d32f2f" stroke-width="2" marker-end="url(#arrowhead2)"/>
+        <line x1="220" y1="65" x2="200" y2="65" stroke="#d32f2f" stroke-width="2" marker-start="url(#arrowhead2)"/>
+        <text x="130" y="60" text-anchor="middle" font-size="10" fill="#d32f2f">Abstand ≤ 5m</text>
+        <defs>
+          <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+            <polygon points="0 0, 10 5, 0 10" fill="#d32f2f"/>
+          </marker>
+        </defs>
+      </svg>`,
+      
+      // Under canopy (+9 dB)
+      `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
+        <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">Unter Vordach (+9 dB)</text>
+        <rect x="30" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
+        <rect x="40" y="70" width="140" height="8" fill="#888" stroke="#666" stroke-width="2"/>
+        <line x1="40" y1="78" x2="40" y2="74" stroke="#666" stroke-width="1"/>
+        <line x1="180" y1="78" x2="180" y2="74" stroke="#666" stroke-width="1"/>
+        <text x="110" y="65" text-anchor="middle" font-size="11" fill="#666">Vordach</text>
+        <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
+        <text x="150" y="195" text-anchor="middle" font-size="12" fill="#666">Boden</text>
+        <rect x="85" y="110" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
+        <text x="110" y="145" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
+        <circle cx="110" cy="140" r="3" fill="#ffeb3b"/>
+        <path d="M 110 140 L 80 100 M 110 140 L 140 100 M 110 140 L 80 170 M 110 140 L 140 170" 
+              stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3"/>
+        <line x1="110" y1="78" x2="110" y2="95" stroke="#d32f2f" stroke-width="2" marker-end="url(#arrowhead3)"/>
+        <text x="125" y="90" text-anchor="start" font-size="10" fill="#d32f2f">≤ 5m</text>
+        <defs>
+          <marker id="arrowhead3" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+            <polygon points="0 0, 10 5, 0 10" fill="#d32f2f"/>
+          </marker>
+        </defs>
+      </svg>`
+    ];
+    
+    diagramDiv.innerHTML = diagrams[selectedIndex];
+  }
+
+  // Update diagram on page load and when selection changes
+  updateK0Diagram();
+  document.getElementById('k0').addEventListener('change', updateK0Diagram);
+
+  function getLimits() {
+    const sensitivity = document.querySelector('input[name="sensitivity"]:checked').value;
+    const limits = {
+      'kategorie1': { day: 40, evening: 35, night: 30 },
+      'kategorie2': { day: 45, evening: 40, night: 35 },
+      'kategorie3': { day: 50, evening: 45, night: 40 }
+    };
+    return limits[sensitivity];
+  }
 
   function calculate() {
-    const Lw = parseFloat(lwInput.value);
-    const r = parseFloat(distanceInput.value);
+    // Get input values
+    const Lw_day = parseFloat(document.getElementById("lw_day").value);
+    const Lw_night = parseFloat(document.getElementById("lw_night").value);
+    const tone_day = parseFloat(document.getElementById("tone_day").value);
+    const tone_night = parseFloat(document.getElementById("tone_night").value);
+    const K0 = parseFloat(document.getElementById("k0").value);
+    const r = parseFloat(document.getElementById("distance").value);
 
-    if (isNaN(Lw) || isNaN(r) || r <= 0 || Lw < 0) {
-      resultDiv.className = "error show";
-      resultDiv.innerHTML = "⚠️ Bitte gültige Werte eingeben.<br><span class='info-text'>Der Abstand muss größer als 0 sein.</span>";
+    // Validate inputs
+    if (isNaN(Lw_day) || isNaN(Lw_night) || isNaN(r) || r <= 0) {
+      resultDiv.className = "show";
+      resultDiv.innerHTML = '<div class="error">⚠️ Bitte gültige Werte eingeben.</div>';
       return;
     }
 
-    const Lp = Lw - 20 * Math.log10(r) - 11;
-    const isAboveThreshold = Lp > THRESHOLD;
-    const thresholdClass = isAboveThreshold ? "threshold-above" : "threshold-below";
-    const thresholdIcon = isAboveThreshold ? "⚠️" : "✓";
-    const thresholdText = isAboveThreshold 
-      ? `Der Wert liegt <strong>${(Lp - THRESHOLD).toFixed(1)} dB(A)</strong> über dem Grenzwert von ${THRESHOLD} dB(A)`
-      : `Der Wert liegt <strong>${(THRESHOLD - Lp).toFixed(1)} dB(A)</strong> unter dem Grenzwert von ${THRESHOLD} dB(A)`;
+    // Calculate according to TA Lärm
+    // Lp = Lw + K0 - 20*log10(r) - 11
+    const Lp_day = Lw_day + K0 - 20 * Math.log10(r) - 11 + tone_day;
+    const Lp_evening = Lw_day + K0 - 20 * Math.log10(r) - 11 + tone_day; // Evening uses day values
+    const Lp_night = Lw_night + K0 - 20 * Math.log10(r) - 11 + tone_night;
+
+    // Get limits
+    const limits = getLimits();
+    
+    // Compare with limits
+    const dayDiff = Lp_day - limits.day;
+    const eveningDiff = Lp_evening - limits.evening;
+    const nightDiff = Lp_night - limits.night;
+    
+    const dayCompliant = Lp_day <= limits.day;
+    const eveningCompliant = Lp_evening <= limits.evening;
+    const nightCompliant = Lp_night <= limits.night;
+    const overallCompliant = dayCompliant && eveningCompliant && nightCompliant;
+
+    // Create result HTML
+    let resultHTML = '<div class="result-section">';
+    resultHTML += '<div class="result-header">📊 Berechnungsergebnisse</div>';
+    
+    resultHTML += '<div class="result-grid">';
+    
+    // Day result
+    resultHTML += '<div class="result-item">';
+    resultHTML += '<div class="result-label">Beurteilungspegel Tag</div>';
+    resultHTML += `<div class="result-value">${Lp_day.toFixed(1)} dB(A)</div>`;
+    resultHTML += `<div class="result-label" style="margin-top: 10px; color: ${dayCompliant ? '#155724' : '#721c24'}">`;
+    resultHTML += `Grenzwert: ${limits.day} dB(A)<br>`;
+    resultHTML += dayCompliant 
+      ? `✓ ${Math.abs(dayDiff).toFixed(1)} dB unter Grenzwert`
+      : `⚠ ${Math.abs(dayDiff).toFixed(1)} dB über Grenzwert`;
+    resultHTML += '</div></div>';
+    
+    // Evening result
+    resultHTML += '<div class="result-item">';
+    resultHTML += '<div class="result-label">Beurteilungspegel Abend</div>';
+    resultHTML += `<div class="result-value">${Lp_evening.toFixed(1)} dB(A)</div>`;
+    resultHTML += `<div class="result-label" style="margin-top: 10px; color: ${eveningCompliant ? '#155724' : '#721c24'}">`;
+    resultHTML += `Grenzwert: ${limits.evening} dB(A)<br>`;
+    resultHTML += eveningCompliant 
+      ? `✓ ${Math.abs(eveningDiff).toFixed(1)} dB unter Grenzwert`
+      : `⚠ ${Math.abs(eveningDiff).toFixed(1)} dB über Grenzwert`;
+    resultHTML += '</div></div>';
+    
+    // Night result
+    resultHTML += '<div class="result-item">';
+    resultHTML += '<div class="result-label">Beurteilungspegel Nacht</div>';
+    resultHTML += `<div class="result-value">${Lp_night.toFixed(1)} dB(A)</div>`;
+    resultHTML += `<div class="result-label" style="margin-top: 10px; color: ${nightCompliant ? '#155724' : '#721c24'}">`;
+    resultHTML += `Grenzwert: ${limits.night} dB(A)<br>`;
+    resultHTML += nightCompliant 
+      ? `✓ ${Math.abs(nightDiff).toFixed(1)} dB unter Grenzwert`
+      : `⚠ ${Math.abs(nightDiff).toFixed(1)} dB über Grenzwert`;
+    resultHTML += '</div></div>';
+    
+    resultHTML += '</div>'; // end result-grid
+    
+    // Overall compliance
+    const comparisonClass = overallCompliant ? 'comparison-below' : 'comparison-above';
+    const comparisonIcon = overallCompliant ? '✓' : '⚠️';
+    const comparisonText = overallCompliant 
+      ? 'Alle Immissionsrichtwerte werden eingehalten.'
+      : 'Mindestens ein Beurteilungspegel liegt über dem Immissionsrichtwert.';
+    
+    resultHTML += `<div class="comparison-box ${comparisonClass}">`;
+    resultHTML += `${comparisonIcon} ${comparisonText}`;
+    resultHTML += '</div>';
+    
+    // Calculation details
+    resultHTML += '<div class="info-box" style="text-align: left;">';
+    resultHTML += '<strong>Berechnungsformel:</strong> Lp = Lw + K₀ - 20·log₁₀(r) - 11 + KT<br>';
+    resultHTML += `<strong>Parameter:</strong><br>`;
+    resultHTML += `• Abstand: ${r} m<br>`;
+    resultHTML += `• Raumwinkelmaß K₀: +${K0} dB<br>`;
+    resultHTML += `• Tonhaltigkeitszuschlag Tag: +${tone_day} dB<br>`;
+    resultHTML += `• Tonhaltigkeitszuschlag Nacht: +${tone_night} dB`;
+    resultHTML += '</div>';
+    
+    resultHTML += '</div>'; // end result-section
 
     resultDiv.className = "show";
-    resultDiv.innerHTML = `
-      <div>Schalldruckpegel in ${r} m Entfernung:</div>
-      <div class="result-value">${Lp.toFixed(1)} dB(A)</div>
-      <div class="threshold-info ${thresholdClass}">
-        ${thresholdIcon} ${thresholdText}
-      </div>
-      <div class="info-text">
-        Formel: Lp = Lw - 20·log₁₀(r) - 11
-      </div>
-    `;
+    resultDiv.innerHTML = resultHTML;
   }
 
   btn.addEventListener("click", calculate);
 
-  lwInput.addEventListener("keypress", function(e) {
-    if (e.key === "Enter") calculate();
-  });
-
-  distanceInput.addEventListener("keypress", function(e) {
-    if (e.key === "Enter") calculate();
+  // Enter key support
+  document.querySelectorAll('input').forEach(input => {
+    input.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") calculate();
+    });
   });
 });
 </script>
