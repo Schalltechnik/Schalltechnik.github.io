@@ -1,78 +1,220 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Schallrechner – Wärmepumpen</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 40px auto;
-            line-height: 1.6;
-        }
-        label {
-            display: block;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-        input {
-            padding: 8px;
-            width: 200px;
-            margin-top: 5px;
-        }
-        button {
-            margin-top: 25px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        #result {
-            margin-top: 25px;
-            font-size: 1.2em;
-            font-weight: bold;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Schallrechner – Wärmepumpen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 20px;
+  line-height: 1.6;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.container {
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+h2 {
+  color: #333;
+  margin-top: 0;
+  text-align: center;
+  font-size: 28px;
+}
+
+.description {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 15px;
+}
+
+.input-group {
+  margin-bottom: 25px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #444;
+  font-size: 15px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 10px;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+#result {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 18px;
+  text-align: center;
+  display: none;
+}
+
+#result.show {
+  display: block;
+}
+
+.result-value {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 15px 0;
+  color: #333;
+}
+
+.threshold-info {
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.threshold-below {
+  background-color: #d4edda;
+  color: #155724;
+  border: 2px solid #c3e6cb;
+}
+
+.threshold-above {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 2px solid #f5c6cb;
+}
+
+.error {
+  background-color: #fff3cd;
+  border: 2px solid #ffc107;
+  color: #856404;
+}
+
+.info-text {
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
+}
+</style>
 </head>
 <body>
+<div class="container">
+  <h2>🔊 Schallrechner für Wärmepumpen</h2>
+  <p class="description">Berechnung des Schalldruckpegels (Lp) in Abhängigkeit von der Entfernung</p>
+  
+  <div class="input-group">
+    <label for="lw">
+      Schallleistungspegel der Wärmepumpe (Lw) in dB(A):
+    </label>
+    <input type="number" id="lw" value="60" step="0.1" min="0" max="120">
+  </div>
 
-<h2>Schallrechner für Wärmepumpen</h2>
-<p>Berechnung des Schalldruckpegels (Lp) in Abhängigkeit von der Entfernung.</p>
+  <div class="input-group">
+    <label for="distance">
+      Abstand zur Wärmepumpe (Meter):
+    </label>
+    <input type="number" id="distance" value="5" step="0.1" min="0.1" max="1000">
+  </div>
 
-<label>
-    Schallleistungspegel der Wärmepumpe (Lw) in dB(A):
-    <input type="number" id="lw" value="60">
-</label>
+  <button type="button" id="calculateBtn">Berechnen</button>
 
-<label>
-    Abstand zur Wärmepumpe (Meter):
-    <input type="number" id="distance" value="5">
-</label>
-
-<button type="button" id="calculateBtn">Berechnen</button>
-
-<div id="result"></div>
+  <div id="result"></div>
+</div>
 
 <script>
-// Warten, bis die Seite geladen ist
 document.addEventListener("DOMContentLoaded", function() {
-    const btn = document.getElementById("calculateBtn");
-    btn.addEventListener("click", function() {
-        const Lw = parseFloat(document.getElementById("lw").value);
-        const r  = parseFloat(document.getElementById("distance").value);
+  const btn = document.getElementById("calculateBtn");
+  const lwInput = document.getElementById("lw");
+  const distanceInput = document.getElementById("distance");
+  const resultDiv = document.getElementById("result");
+  const THRESHOLD = 30;
 
-        if (r <= 0 || isNaN(Lw) || isNaN(r)) {
-            document.getElementById("result").innerHTML = "Bitte gültige Werte eingeben.";
-            return;
-        }
+  function calculate() {
+    const Lw = parseFloat(lwInput.value);
+    const r = parseFloat(distanceInput.value);
 
-        const Lp = Lw - 20 * Math.log10(r) - 11;
+    if (isNaN(Lw) || isNaN(r) || r <= 0 || Lw < 0) {
+      resultDiv.className = "error show";
+      resultDiv.innerHTML = "⚠️ Bitte gültige Werte eingeben.<br><span class='info-text'>Der Abstand muss größer als 0 sein.</span>";
+      return;
+    }
 
-        document.getElementById("result").innerHTML =
-            "Schalldruckpegel in " + r + " m: <b>" + Lp.toFixed(1) + " dB(A)</b>";
-    });
+    const Lp = Lw - 20 * Math.log10(r) - 11;
+    const isAboveThreshold = Lp > THRESHOLD;
+    const thresholdClass = isAboveThreshold ? "threshold-above" : "threshold-below";
+    const thresholdIcon = isAboveThreshold ? "⚠️" : "✓";
+    const thresholdText = isAboveThreshold 
+      ? `Der Wert liegt <strong>${(Lp - THRESHOLD).toFixed(1)} dB(A)</strong> über dem Grenzwert von ${THRESHOLD} dB(A)`
+      : `Der Wert liegt <strong>${(THRESHOLD - Lp).toFixed(1)} dB(A)</strong> unter dem Grenzwert von ${THRESHOLD} dB(A)`;
+
+    resultDiv.className = "show";
+    resultDiv.innerHTML = `
+      <div>Schalldruckpegel in ${r} m Entfernung:</div>
+      <div class="result-value">${Lp.toFixed(1)} dB(A)</div>
+      <div class="threshold-info ${thresholdClass}">
+        ${thresholdIcon} ${thresholdText}
+      </div>
+      <div class="info-text">
+        Formel: Lp = Lw - 20·log₁₀(r) - 11
+      </div>
+    `;
+  }
+
+  btn.addEventListener("click", calculate);
+
+  lwInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") calculate();
+  });
+
+  distanceInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") calculate();
+  });
 });
 </script>
-
 </body>
 </html>
