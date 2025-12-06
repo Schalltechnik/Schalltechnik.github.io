@@ -1,10 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Test</title>
+    <meta charset="UTF-8">
+    <title>Schallrechner – Wärmepumpen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            line-height: 1.6;
+        }
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        input {
+            padding: 8px;
+            width: 200px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 25px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-  <h1>GitHub Pages is working!</h1>
-</body>
-</html>
+
+<h2>Schallrechner für Wärmepumpen</h2>
+<p>Berechnung des Schalldruckpegels (Lp) in Abhängigkeit von der Entfernung.</p>
+
+<label>
+    Schallleistungspegel der Wärmepumpe (Lw) in dB(A):
+    <input type="number" id="lw" value="60">
+</label>
+
+<label>
+    Abstand zur Wärmepumpe (Meter):
+    <input type="number" id="distance" value="5">
+</label>
+
+<button onclick="calculate()">Berechnen</button>
+
+<div id="result"></div>
+
+<script>
+function calculate() {
+    const Lw = parseFloat(document.getElementById("lw").value);
+    const r  = parseFloat(document.getElementById("distance").value);
+
+    if (r <= 0 || isNaN(Lw) || isNaN(r)) {
+        document.getElementById("result").innerHTML = "Bitte gültige Werte eingeben.";
+        return;
+    }
+
+    // Schallabnahme nach Kugelausbreitung:
+    // Lp(r) = Lw - 20*log10(r) - 11
+    const Lp = Lw - 20 * Math.log10(r) -*
