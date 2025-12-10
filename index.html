@@ -2,42 +2,183 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Schallrechner – Wärmepumpen</title>
+<title>Schallrechner Luftwärmepumpen | OIB-Richtlinie 5</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Professioneller Schallrechner für Luftwärmepumpen nach OIB-Richtlinie 5 (2023) und TA Lärm">
 <style>
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary-green: #4a7c3b;
+  --primary-dark: #2d5a24;
+  --secondary-green: #5a9247;
+  --light-green: #f0f7ed;
+  --border-color: #e0e0e0;
+  --text-dark: #333;
+  --text-medium: #666;
+  --text-light: #999;
+  --success-bg: #d4edda;
+  --success-border: #c3e6cb;
+  --success-text: #155724;
+  --warning-bg: #fff3cd;
+  --warning-border: #ffc107;
+  --warning-text: #856404;
+  --error-bg: #f8d7da;
+  --error-border: #f5c6cb;
+  --error-text: #721c24;
+  --info-bg: #e7f3ff;
+  --info-border: #b3d9ff;
+  --info-text: #004085;
 }
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
   line-height: 1.6;
-  background: linear-gradient(135deg, #4a7c3b 0%, #2d5a24 100%);
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
   min-height: 100vh;
+  padding: 20px;
 }
 
-.container {
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+h1 {
+  color: var(--text-dark);
+  font-size: 32px;
+  margin: 0;
+}
+
+.subtitle {
+  color: var(--text-medium);
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+nav {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-btn {
+  padding: 10px 20px;
+  background: var(--light-green);
+  border: 2px solid var(--primary-green);
+  border-radius: 6px;
+  color: var(--primary-dark);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.nav-btn:hover {
+  background: var(--primary-green);
+  color: white;
+}
+
+.nav-btn.active {
+  background: var(--primary-green);
+  color: white;
+}
+
+.content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 1024px) {
+  .content-wrapper.with-sidebar {
+    grid-template-columns: 1fr 350px;
+  }
+}
+
+.main-content {
   background: white;
   border-radius: 12px;
   padding: 40px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.2);
 }
 
-h2 {
-  color: #333;
-  margin-top: 0;
-  text-align: center;
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.info-card h3 {
+  color: var(--text-dark);
+  font-size: 18px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.info-card li {
+  padding: 8px 0;
+  color: var(--text-medium);
+  font-size: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.info-card li:last-child {
+  border-bottom: none;
+}
+
+.info-card li:before {
+  content: "✓ ";
+  color: var(--primary-green);
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.page-title {
+  color: var(--text-dark);
+  margin-bottom: 10px;
   font-size: 28px;
 }
 
-.description {
-  text-align: center;
-  color: #666;
+.page-description {
+  color: var(--text-medium);
   margin-bottom: 30px;
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 1.7;
 }
 
 .section {
@@ -45,13 +186,13 @@ h2 {
   padding: 25px;
   background: #f8f9fa;
   border-radius: 8px;
-  border-left: 4px solid #4a7c3b;
+  border-left: 4px solid var(--primary-green);
 }
 
 .section-title {
   font-size: 20px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-dark);
   margin-bottom: 20px;
   display: flex;
   align-items: center;
@@ -62,9 +203,9 @@ h2 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
+  min-width: 32px;
   height: 32px;
-  background: #4a7c3b;
+  background: var(--primary-green);
   color: white;
   border-radius: 50%;
   font-size: 16px;
@@ -78,23 +219,52 @@ label {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #444;
+  color: var(--text-dark);
   font-size: 15px;
 }
 
 input, select {
   width: 100%;
   padding: 12px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
   border-radius: 6px;
   font-size: 16px;
   transition: border-color 0.3s;
   background: white;
+  font-family: inherit;
 }
 
 input:focus, select:focus {
   outline: none;
-  border-color: #4a7c3b;
+  border-color: var(--primary-green);
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-unit {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.unit-label {
+  padding: 12px 16px;
+  background: var(--light-green);
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
 }
 
 .radio-group {
@@ -108,7 +278,7 @@ input:focus, select:focus {
   display: flex;
   align-items: center;
   padding: 12px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s;
@@ -116,8 +286,8 @@ input:focus, select:focus {
 }
 
 .radio-option:hover {
-  border-color: #4a7c3b;
-  background: #f0f7ed;
+  border-color: var(--primary-green);
+  background: var(--light-green);
 }
 
 .radio-option input[type="radio"] {
@@ -127,8 +297,52 @@ input:focus, select:focus {
 }
 
 .radio-option.selected {
-  border-color: #4a7c3b;
-  background: #f0f7ed;
+  border-color: var(--primary-green);
+  background: var(--light-green);
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: white;
+  margin-bottom: 10px;
+}
+
+.checkbox-option:hover {
+  border-color: var(--primary-green);
+  background: var(--light-green);
+}
+
+.checkbox-option input[type="checkbox"] {
+  width: auto;
+  margin-right: 10px;
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.checkbox-option.selected {
+  border-color: var(--primary-green);
+  background: var(--light-green);
+}
+
+.help-text {
+  font-size: 13px;
+  color: var(--text-medium);
+  margin-top: 5px;
+  font-style: italic;
+}
+
+.diagram-container {
+  margin-top: 15px;
+  padding: 15px;
+  background: white;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
 }
 
 button {
@@ -137,12 +351,13 @@ button {
   font-size: 18px;
   font-weight: 600;
   color: white;
-  background: linear-gradient(135deg, #4a7c3b 0%, #2d5a24 100%);
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s;
   margin-top: 10px;
+  font-family: inherit;
 }
 
 button:hover {
@@ -152,6 +367,23 @@ button:hover {
 
 button:active {
   transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.button-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.secondary-btn {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
 }
 
 #result {
@@ -167,6 +399,7 @@ button:active {
   padding: 25px;
   border-radius: 8px;
   margin-bottom: 20px;
+  border: 2px solid var(--border-color);
 }
 
 .result-header {
@@ -174,7 +407,7 @@ button:active {
   font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--text-dark);
 }
 
 .result-grid {
@@ -188,19 +421,27 @@ button:active {
   background: white;
   padding: 15px;
   border-radius: 6px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
 }
 
 .result-label {
   font-size: 14px;
-  color: #666;
+  color: var(--text-medium);
   margin-bottom: 5px;
 }
 
 .result-value {
   font-size: 24px;
   font-weight: bold;
-  color: #333;
+  color: var(--text-dark);
+}
+
+.result-sublabel {
+  font-size: 12px;
+  color: var(--text-medium);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color);
 }
 
 .comparison-box {
@@ -213,409 +454,798 @@ button:active {
 }
 
 .comparison-below {
-  background-color: #d4edda;
-  color: #155724;
-  border: 2px solid #c3e6cb;
+  background-color: var(--success-bg);
+  color: var(--success-text);
+  border: 2px solid var(--success-border);
 }
 
 .comparison-above {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 2px solid #f5c6cb;
+  background-color: var(--error-bg);
+  color: var(--error-text);
+  border: 2px solid var(--error-border);
 }
 
 .info-box {
-  background: #e7f3ff;
-  border: 2px solid #b3d9ff;
+  background: var(--info-bg);
+  border: 2px solid var(--info-border);
   border-radius: 6px;
   padding: 15px;
   margin-top: 15px;
   font-size: 14px;
-  color: #004085;
+  color: var(--info-text);
+  line-height: 1.6;
 }
 
-.help-text {
-  font-size: 13px;
-  color: #666;
-  margin-top: 5px;
-  font-style: italic;
+.warning-box {
+  background: var(--warning-bg);
+  border: 2px solid var(--warning-border);
+  border-radius: 6px;
+  padding: 15px;
+  margin-top: 15px;
+  font-size: 14px;
+  color: var(--warning-text);
+  line-height: 1.6;
 }
 
-.error {
-  background-color: #fff3cd;
-  border: 2px solid #ffc107;
-  color: #856404;
+.error-box {
+  background: var(--error-bg);
+  border: 2px solid var(--error-border);
+  color: var(--error-text);
   padding: 20px;
   border-radius: 8px;
   text-align: center;
 }
+
+.details-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.details-table th,
+.details-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.details-table th {
+  background: var(--light-green);
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.details-table tr:last-child td {
+  border-bottom: none;
+}
+
+.collapsible-section {
+  margin-top: 20px;
+}
+
+.collapsible-header {
+  background: var(--light-green);
+  padding: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: var(--text-dark);
+  transition: background 0.3s;
+}
+
+.collapsible-header:hover {
+  background: #e0f0dc;
+}
+
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.collapsible-content.open {
+  max-height: 2000px;
+  padding-top: 15px;
+}
+
+.chevron {
+  transition: transform 0.3s;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+footer {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: center;
+  color: var(--text-medium);
+  font-size: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+  
+  header, .main-content, .info-card {
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+  
+  .button-group {
+    grid-template-columns: 1fr;
+  }
+  
+  nav {
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .nav-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media print {
+  body {
+    background: white;
+    padding: 0;
+  }
+  
+  header, footer, nav, .sidebar, button, .info-box, .warning-box {
+    display: none;
+  }
+  
+  .main-content {
+    box-shadow: none;
+    padding: 20px;
+  }
+}
 </style>
 </head>
 <body>
-<div class="container">
-  <h2>🔊 Schallrechner für Wärmepumpen</h2>
-  <p class="description">Berechnung der Schallimmissionen aus dem Betrieb einer Luftwärmepumpe </p>
-  
-  <!-- Section 1: Heat Pump Data -->
-  <div class="section">
-    <div class="section-title">
-      <span class="section-number">1</span>
-      Angaben zur Luft-Wärmepumpe
-    </div>
-    
-    <div class="input-group">
-      <label for="lw_day">Max. Schallleistungspegel Tagbetrieb (dB(A)):</label>
-      <input type="number" id="lw_day" value="60" step="0.1" min="0" max="120">
-    </div>
-
-    <div class="input-group">
-      <label for="lw_night">Max. Schallleistungspegel schallreduzierter Betrieb (dB(A)):</label>
-      <input type="number" id="lw_night" value="55" step="0.1" min="0" max="120">
-      <div class="help-text">Für Nachtbetrieb</div>
-    </div>
-
-    <div class="input-group">
-      <label>Zuschlag für Tonhaltigkeit (Tagbetrieb):</label>
-      <select id="tone_day">
-        <option value="0">nicht hörbar (0 dB)</option>
-        <option value="3">hörbar (+3 dB)</option>
-        <option value="6">stark hörbar (+6 dB)</option>
-      </select>
-    </div>
-
-    <div class="input-group">
-      <label>Zuschlag für Tonhaltigkeit (Nachtbetrieb):</label>
-      <select id="tone_night">
-        <option value="0">nicht hörbar (0 dB)</option>
-        <option value="3">hörbar (+3 dB)</option>
-        <option value="6">stark hörbar (+6 dB)</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- Section 2: Sensitivity Level -->
-  <div class="section">
-    <div class="section-title">
-      <span class="section-number">2</span>
-      Immissionsrichtwert gemäß OIB Nr.5 (2023)
-    </div>
-    
-    <div class="input-group">
-      <label>Empfindlichkeitsstufe:</label>
-      <div class="radio-group">
-        <label class="radio-option">
-          <input type="radio" name="sensitivity" value="kategorie1" checked>
-          <span>Kategorie 1 (Tag: 40 dB / Abend: 35 dB / Nacht: 30 dB)</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="sensitivity" value="kategorie2">
-          <span>Kategorie 2 (Tag: 45 dB / Abend: 40 dB / Nacht: 35 dB)</span>
-        </label>
-        <label class="radio-option">
-          <input type="radio" name="sensitivity" value="kategorie3">
-          <span>Kategorie 3 (Tag: 50 dB / Abend: 45 dB / Nacht: 40 dB)</span>
-        </label>
+<div class="page-container">
+  <header>
+    <div class="header-content">
+      <div>
+        <h1>🔊 Schallrechner Luftwärmepumpen</h1>
+        <div class="subtitle">Berechnung nach OIB-Richtlinie 5 (2023) und TA Lärm</div>
       </div>
+      <nav>
+        <button class="nav-btn active" onclick="showPage('calculator')">Rechner</button>
+        <button class="nav-btn" onclick="showPage('basics')">Grundlagen</button>
+        <button class="nav-btn" onclick="showPage('about')">Info</button>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <!-- Section 3: Installation Setup -->
-  <div class="section">
-    <div class="section-title">
-      <span class="section-number">3</span>
-      Aufstellung
-    </div>
-    
-    <div class="input-group">
-      <label>Raumwinkelmaß K₀:</label>
-      <select id="k0">
-        <option value="3">WP frei aufgestellt, keine Wand näher als 3 m (+3 dB)</option>
-        <option value="6">WP an einer Wand, Abstand bis zu 3 m (+6 dB)</option>
-        <option value="9">WP in einer Ecke, Abstand jeweils bis zu 3 m (+9 dB)</option>
-        <option value="9">WP zwischen zwei Wänden, Abstand bis zu 5 m (+9 dB)</option>
-        <option value="9">WP unter einem Vordach, Höhe bis zu 5m (+9 dB)</option>
-      </select>
-      <div class="help-text">Aufstellungssituation der Wärmepumpe</div>
-      <div id="k0-diagram" style="margin-top: 15px; padding: 15px; background: white; border: 2px solid #e0e0e0; border-radius: 6px;">
-        <!-- Diagram will be inserted here by JavaScript -->
+  <div class="content-wrapper with-sidebar">
+    <main class="main-content">
+      <!-- CALCULATOR PAGE -->
+      <div id="page-calculator" class="page-content">
+        <h2 class="page-title">Schallimmissionsrechner</h2>
+        <p class="page-description">
+          Dieser Rechner ermöglicht die überschlägige Ermittlung der Schallimmissionen einer oder mehrerer Luftwärmepumpen 
+          an der Grundstücksgrenze und am Immissionsort (z.B. Fenster). Die Berechnung erfolgt nach dem vereinfachten 
+          Verfahren der TA Lärm unter Berücksichtigung der Immissionsrichtwerte nach OIB-Richtlinie 5.
+        </p>
+
+        <!-- Section 1: Device Data -->
+        <div class="section">
+          <div class="section-title">
+            <span class="section-number">1</span>
+            Angaben zur Wärmepumpe
+          </div>
+          
+          <div class="input-group">
+            <label>Gerätedatenbank:</label>
+            <select id="device_database" onchange="loadDeviceData()">
+              <option value="">Gerät manuell eingeben</option>
+              <optgroup label="Beispielgeräte (Richtwerte)">
+                <option value="db1">Luft-WP 6 kW (Lw Tag: 58 dB / Nacht: 53 dB)</option>
+                <option value="db2">Luft-WP 10 kW (Lw Tag: 62 dB / Nacht: 57 dB)</option>
+                <option value="db3">Luft-WP 15 kW (Lw Tag: 65 dB / Nacht: 60 dB)</option>
+                <option value="db4">Luft-WP 20 kW (Lw Tag: 67 dB / Nacht: 62 dB)</option>
+              </optgroup>
+            </select>
+            <div class="help-text">Wählen Sie ein Beispielgerät oder geben Sie die Werte manuell ein</div>
+          </div>
+
+          <div class="input-group">
+            <label for="lw_day">Max. Schallleistungspegel Tagbetrieb L<sub>W,A,max</sub>:</label>
+            <div class="input-unit">
+              <input type="number" id="lw_day" value="60" step="0.1" min="0" max="120">
+              <span class="unit-label">dB(A)</span>
+            </div>
+            <div class="help-text">Wert aus Herstellerangaben (nicht ErP-Label)</div>
+          </div>
+
+          <div class="input-group">
+            <label for="lw_night">Max. Schallleistungspegel schallreduzierter Betrieb L<sub>W,A,red</sub>:</label>
+            <div class="input-unit">
+              <input type="number" id="lw_night" value="55" step="0.1" min="0" max="120">
+              <span class="unit-label">dB(A)</span>
+            </div>
+            <div class="help-text">Für Nacht- und Abendbetrieb (22:00-6:00 und 19:00-22:00 Uhr)</div>
+          </div>
+
+          <div class="input-group">
+            <label>Tonhaltigkeit Tagbetrieb (K<sub>T</sub>):</label>
+            <select id="tone_day">
+              <option value="0">nicht hörbar (0 dB)</option>
+              <option value="3">hörbar (+3 dB)</option>
+              <option value="6">stark hörbar (+6 dB)</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Tonhaltigkeit Nacht-/Abendbetrieb (K<sub>T</sub>):</label>
+            <select id="tone_night">
+              <option value="0">nicht hörbar (0 dB)</option>
+              <option value="3">hörbar (+3 dB)</option>
+              <option value="6">stark hörbar (+6 dB)</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="num_units">Anzahl gleichzeitig betriebener Anlagen:</label>
+            <div class="input-unit">
+              <input type="number" id="num_units" value="1" step="1" min="1" max="10">
+              <span class="unit-label">Stück</span>
+            </div>
+            <div class="help-text">Mehrere Anlagen auf einem Grundstück sind als Gesamtanlage zu betrachten</div>
+          </div>
+        </div>
+
+        <!-- Section 2: Limits -->
+        <div class="section">
+          <div class="section-title">
+            <span class="section-number">2</span>
+            Immissionsrichtwerte
+          </div>
+          
+          <div class="input-group">
+            <label>Empfindlichkeitsstufe gemäß OIB-RL 5, Punkt 5.2:</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" name="sensitivity" value="kategorie1" checked>
+                <span><strong>Kategorie 1</strong> – Ruhegebiete, Kurgebiete, Wohngebiet in Vororten<br>
+                <small style="color: #666;">Tag: 40 dB / Abend: 35 dB / Nacht: 30 dB</small></span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="sensitivity" value="kategorie2">
+                <span><strong>Kategorie 2</strong> – Städtisches Wohngebiet, ländliches Wohngebiet<br>
+                <small style="color: #666;">Tag: 45 dB / Abend: 40 dB / Nacht: 35 dB</small></span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="sensitivity" value="kategorie3">
+                <span><strong>Kategorie 3</strong> – Wohnen in städtischem Umfeld, Kerngebiet, Mischgebiet<br>
+                <small style="color: #666;">Tag: 50 dB / Abend: 45 dB / Nacht: 40 dB</small></span>
+              </label>
+            </div>
+            <div class="help-text">Die Kategorien sind durch die Bundesländer festzulegen bzw. werden aus der Flächenwidmung abgeleitet</div>
+          </div>
+        </div>
+
+        <!-- Section 3: Installation -->
+        <div class="section">
+          <div class="section-title">
+            <span class="section-number">3</span>
+            Aufstellung und Abstände
+          </div>
+          
+          <div class="input-group">
+            <label>Raumwinkelmaß K₀:</label>
+            <select id="k0" onchange="updateK0Diagram()">
+              <option value="3">Frei aufgestellt (keine Wand näher als 3 m) – K₀ = +3 dB</option>
+              <option value="6">An einer Wand (Abstand bis zu 3 m) – K₀ = +6 dB</option>
+              <option value="9">In einer Ecke (Abstand jeweils bis zu 3 m) – K₀ = +9 dB</option>
+              <option value="9.5">Zwischen zwei Wänden (Abstand bis zu 5 m) – K₀ = +9 dB</option>
+              <option value="9.6">Unter einem Vordach (Höhe bis zu 5 m) – K₀ = +9 dB</option>
+            </select>
+            <div class="help-text">Aufstellungssituation beeinflusst die Schallabstrahlung</div>
+            <div id="k0-diagram" class="diagram-container"></div>
+          </div>
+
+          <div class="input-group">
+            <label for="distance_boundary">Abstand Wärmepumpe – Grundstücksgrenze:</label>
+            <div class="input-unit">
+              <input type="number" id="distance_boundary" value="5" step="0.1" min="0.1" max="1000">
+              <span class="unit-label">m</span>
+            </div>
+            <div class="help-text">Kürzester Abstand zur Nachbargrundstücksgrenze (nicht Verkehrsfläche)</div>
+          </div>
+
+          <div class="input-group">
+            <label for="distance_immission">Abstand Wärmepumpe – Immissionsort (z.B. Fenster):</label>
+            <div class="input-unit">
+              <input type="number" id="distance_immission" value="8" step="0.1" min="0.1" max="1000">
+              <span class="unit-label">m</span>
+            </div>
+            <div class="help-text">Abstand zum schutzbedürftigen Raum (z.B. Schlafzimmerfenster des Nachbarn)</div>
+          </div>
+        </div>
+
+        <!-- Section 4: Sound Protection Measures -->
+        <div class="section">
+          <div class="section-title">
+            <span class="section-number">4</span>
+            Schallschutzmaßnahmen (optional)
+          </div>
+          
+          <div class="input-group">
+            <label>Berücksichtigte Maßnahmen:</label>
+            
+            <label class="checkbox-option">
+              <input type="checkbox" id="measure_enclosure">
+              <span><strong>Schalleinhausung</strong><br>
+              <small style="color: #666;">Pegelminderung: -10 dB | Zusätzliche Dämmung um die Wärmepumpe</small></span>
+            </label>
+
+            <label class="checkbox-option">
+              <input type="checkbox" id="measure_wall">
+              <span><strong>Schallschutzwand / -kulisse</strong><br>
+              <small style="color: #666;">Pegelminderung: -6 dB | Absorbierendes Element zwischen Quelle und Immissionsort</small></span>
+            </label>
+
+            <label class="checkbox-option">
+              <input type="checkbox" id="measure_damping">
+              <span><strong>Körperschallentkopplung</strong><br>
+              <small style="color: #666;">Pegelminderung: -3 dB | Schwingungsdämpfende Aufstellung</small></span>
+            </label>
+
+            <div class="warning-box">
+              <strong>Hinweis:</strong> Die angegebenen Pegelminderungen sind Richtwerte. 
+              Die tatsächliche Wirkung hängt von der konkreten Ausführung ab und sollte durch einen Sachverständigen geprüft werden.
+            </div>
+          </div>
+        </div>
+
+        <button type="button" id="calculateBtn" onclick="calculate()">
+          🧮 Berechnung durchführen
+        </button>
+
+        <!-- RESULTS -->
+        <div id="result"></div>
+
+        <div class="info-box">
+          <strong>Wichtiger Hinweis:</strong> Diese Berechnung stellt eine überschlägige Prognose dar und 
+          ersetzt im Falle von Nachbarschaftsstreitigkeiten oder behördlichen Verfahren kein individuelles 
+          Schallgutachten durch einen befugten Sachverständigen. Die Berechnung berücksichtigt keine 
+          Reflexionen, Abschirmungen durch Gebäude oder Topografie, meteorologische Einflüsse oder 
+          Frequenzspektren.
+        </div>
       </div>
-    </div>
 
-    <div class="input-group">
-      <label for="distance">Distanz (s) Luftwärmepumpe - Grundgrenze (Meter):</label>
-      <input type="number" id="distance" value="5" step="0.1" min="0.1" max="1000">
-      <div class="help-text">Abstand zwischen Wärmepumpe und maßgeblichem Immissionsort</div>
-    </div>
+      <!-- BASICS PAGE -->
+      <div id="page-basics" class="page-content" style="display: none;">
+        <h2 class="page-title">Grundlagen zum Schall</h2>
+        
+        <div class="section">
+          <div class="section-title">Was ist Schall?</div>
+          <p>Schall ist eine mechanische Schwingung, die sich durch die Luft oder andere Medien ausbreitet. 
+          Der Mensch nimmt Schalldruckänderungen über das Ohr als Geräusch wahr.</p>
+          <p style="margin-top: 10px;"><strong>Schalldruckpegel:</strong> Der Schalldruck wird in Dezibel (dB) gemessen. 
+          Die Dezibelskala ist logarithmisch – eine Verdoppelung der Schallenergie entspricht einer Erhöhung um 3 dB, 
+          eine Verzehnfachung um 10 dB.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Frequenzbewertung dB(A)</div>
+          <p>Das menschliche Ohr nimmt verschiedene Frequenzen unterschiedlich laut wahr. 
+          Tiefe und sehr hohe Töne werden als leiser empfunden als mittlere Frequenzen.</p>
+          <p style="margin-top: 10px;">Der <strong>A-bewertete Schalldruckpegel dB(A)</strong> gewichtet 
+          die Frequenzen entsprechend der menschlichen Hörempfindung. Für Lärmschutzbetrachtungen wird daher 
+          üblicherweise dB(A) verwendet.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Schallemission vs. Schallimmission</div>
+          <table class="details-table">
+            <tr>
+              <th>Begriff</th>
+              <th>Bedeutung</th>
+              <th>Beispiel</th>
+            </tr>
+            <tr>
+              <td><strong>Schallemission</strong></td>
+              <td>Von einer Quelle ausgehender Schall</td>
+              <td>Schallleistungspegel L<sub>W</sub> einer Wärmepumpe</td>
+            </tr>
+            <tr>
+              <td><strong>Schallimmission</strong></td>
+              <td>Am Empfangsort ankommender Schall</td>
+              <td>Schalldruckpegel L<sub>p</sub> am Nachbarfenster</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Schallausbreitung und Abstandsdämpfung</div>
+          <p>Schall breitet sich von einer punktförmigen Quelle kugelförmig aus. Mit zunehmendem Abstand 
+          verteilt sich die Schallenergie auf eine größere Fläche, der Pegel nimmt ab:</p>
+          <p style="margin-top: 10px; padding: 15px; background: white; border-radius: 6px; font-family: monospace;">
+            <strong>Abstandsdämpfung = 20 · log₁₀(r) + 11 dB</strong><br>
+            <small style="font-family: inherit;">bei Verdoppelung des Abstands: Pegelabnahme um ca. 6 dB</small>
+          </p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Raumwinkelmaß K₀</div>
+          <p>Die Aufstellung der Schallquelle beeinflusst die Schallabstrahlung:</p>
+          <ul style="margin-top: 10px; padding-left: 20px;">
+            <li><strong>Frei aufgestellt (K₀ = +3 dB):</strong> Schall breitet sich in alle Richtungen aus</li>
+            <li><strong>An einer Wand (K₀ = +6 dB):</strong> Reflexion an einer Fläche, Schall strahlt in Halbraum</li>
+            <li><strong>In einer Ecke (K₀ = +9 dB):</strong> Reflexion an zwei Flächen, Schall strahlt in Viertelraum</li>
+          </ul>
+          <p style="margin-top: 10px;">Je stärker die Quelle durch reflektierende Flächen umgeben ist, 
+          desto höher ist der resultierende Schalldruckpegel.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Tonhaltigkeit</div>
+          <p>Geräusche mit auffälligen Einzeltönen (z.B. Pfeifen, Brummen) werden als störender empfunden. 
+          Daher wird bei tonhaltigen Geräuschen ein Zuschlag von +3 bis +6 dB auf den Beurteilungspegel angewendet.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">OIB-Richtlinie 5 und Immissionsrichtwerte</div>
+          <p>Die <strong>OIB-Richtlinie 5</strong> (Ausgabe Mai 2023) regelt den Schallschutz im Hochbau in Österreich. 
+          Punkt 5.2 definiert Immissionsrichtwerte für technische Anlagen zur Konditionierung von Gebäuden 
+          bei Schallübertragung im Freien.</p>
+          
+          <table class="details-table" style="margin-top: 15px;">
+            <tr>
+              <th>Kategorie</th>
+              <th>Tag<br>6-19 Uhr</th>
+              <th>Abend<br>19-22 Uhr</th>
+              <th>Nacht<br>22-6 Uhr</th>
+            </tr>
+            <tr>
+              <td><strong>Kategorie 1</strong><br><small>Ruhegebiete, Kurorte</small></td>
+              <td>40 dB</td>
+              <td>35 dB</td>
+              <td>30 dB</td>
+            </tr>
+            <tr>
+              <td><strong>Kategorie 2</strong><br><small>Wohngebiete</small></td>
+              <td>45 dB</td>
+              <td>40 dB</td>
+              <td>35 dB</td>
+            </tr>
+            <tr>
+              <td><strong>Kategorie 3</strong><br><small>Mischgebiete</small></td>
+              <td>50 dB</td>
+              <td>45 dB</td>
+              <td>40 dB</td>
+            </tr>
+          </table>
+
+          <p style="margin-top: 15px;">Die Werte gelten als <strong>energieäquivalente Dauerschallpegel</strong> 
+          an der Nachbargrundstücksgrenze sowie an Fenstern und Außentüren von Aufenthaltsräumen anderer Wohneinheiten 
+          auf dem eigenen Grundstück.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Schallschutzmaßnahmen</div>
+          <p>Zur Reduktion der Schallimmission stehen verschiedene Maßnahmen zur Verfügung:</p>
+          <ul style="margin-top: 10px; padding-left: 20px;">
+            <li><strong>Standortwahl:</strong> Größtmöglicher Abstand zu schutzbedürftigen Räumen</li>
+            <li><strong>Abschirmung:</strong> Schallschutzwände, -kulissen oder natürliche Hindernisse</li>
+            <li><strong>Einhausung:</strong> Vollständige oder teilweise Umschließung der Schallquelle</li>
+            <li><strong>Körperschallentkopplung:</strong> Elastische Aufstellung zur Vermeidung von Schwingungsübertragung</li>
+            <li><strong>Schallreduziermodus:</strong> Leistungsreduzierung bzw. Drehzahlregelung in sensiblen Zeiten</li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <strong>Weitere Informationen:</strong>
+          <ul style="margin-top: 10px; padding-left: 20px;">
+            <li>OIB-Richtlinie 5 "Schallschutz" (Mai 2023)</li>
+            <li>TA Lärm – Technische Anleitung zum Schutz gegen Lärm (DE)</li>
+            <li>ÖNORM B 8115-2 – Methodik zur Ermittlung von Schallschutzniveaus</li>
+            <li>ÖNORM S 5021 – Schalltechnische Grundlagen für die Raumplanung</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ABOUT PAGE -->
+      <div id="page-about" class="page-content" style="display: none;">
+        <h2 class="page-title">Über diesen Rechner</h2>
+        
+        <div class="section">
+          <div class="section-title">Zweck und Anwendungsbereich</div>
+          <p>Dieser Schallrechner wurde entwickelt, um Planern, Installateuren und Bauherren ein Werkzeug 
+          zur überschlägigen Beurteilung der Schallimmissionen von Luftwärmepumpen bereitzustellen.</p>
+          
+          <p style="margin-top: 10px;">Die Berechnung erfolgt nach dem <strong>vereinfachten Prognoseverfahren</strong> 
+          der TA Lärm unter Berücksichtigung der <strong>OIB-Richtlinie 5 (Mai 2023)</strong>, Punkt 5.2.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Berechnungsgrundlagen</div>
+          <p><strong>Verwendete Formel:</strong></p>
+          <div style="padding: 15px; background: white; border-radius: 6px; margin: 10px 0; font-family: monospace;">
+            L<sub>p</sub> = L<sub>W</sub> + K₀ - 20·log₁₀(r) - 11 + K<sub>T</sub> + K<sub>M</sub>
+          </div>
+          
+          <table class="details-table">
+            <tr>
+              <th>Symbol</th>
+              <th>Bedeutung</th>
+            </tr>
+            <tr>
+              <td>L<sub>p</sub></td>
+              <td>Schalldruckpegel am Immissionsort [dB(A)]</td>
+            </tr>
+            <tr>
+              <td>L<sub>W</sub></td>
+              <td>Schallleistungspegel der Quelle [dB(A)]</td>
+            </tr>
+            <tr>
+              <td>K₀</td>
+              <td>Raumwinkelmaß (Aufstellungssituation) [dB]</td>
+            </tr>
+            <tr>
+              <td>r</td>
+              <td>Abstand Quelle - Immissionsort [m]</td>
+            </tr>
+            <tr>
+              <td>K<sub>T</sub></td>
+              <td>Zuschlag für Tonhaltigkeit [dB]</td>
+            </tr>
+            <tr>
+              <td>K<sub>M</sub></td>
+              <td>Pegelminderung durch Schallschutzmaßnahmen [dB]</td>
+            </tr>
+          </table>
+          
+          <p style="margin-top: 15px;"><strong>Mehrere Anlagen:</strong><br>
+          Bei n gleichzeitig betriebenen Anlagen mit identischen Schallleistungspegeln:</p>
+          <div style="padding: 15px; background: white; border-radius: 6px; margin: 10px 0; font-family: monospace;">
+            L<sub>W,gesamt</sub> = L<sub>W,einzeln</sub> + 10·log₁₀(n)
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Grenzen der Berechnung</div>
+          <p>Dieses vereinfachte Verfahren berücksichtigt <strong>nicht</strong>:</p>
+          <ul style="margin-top: 10px; padding-left: 20px;">
+            <li>Reflexionen an Gebäudefassaden und anderen Hindernissen</li>
+            <li>Abschirmungen durch Topografie oder Bebauung</li>
+            <li>Meteorologische Einflüsse (Wind, Temperatur, Luftfeuchtigkeit)</li>
+            <li>Frequenzspektrum und tieffrequente Geräuschanteile</li>
+            <li>Impulshaltigkeit und Informationshaltigkeit</li>
+            <li>Vorbelastung durch andere Schallquellen</li>
+          </ul>
+          
+          <div class="warning-box" style="margin-top: 15px;">
+            <strong>Wichtig:</strong> Für behördliche Verfahren, Baugenehmigungen oder bei Nachbarschaftsstreitigkeiten 
+            ist ein <strong>Schallgutachten durch einen befugten Sachverständigen</strong> erforderlich. 
+            Dieses beinhaltet in der Regel eine detaillierte Schallausbreitungsberechnung nach DIN ISO 9613-2 
+            oder vergleichbaren Normen sowie ggf. Schallmessungen vor Ort.
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Datenquellen</div>
+          <p><strong>Schallleistungspegel der Wärmepumpen:</strong></p>
+          <p style="margin-top: 10px;">Die Schallleistungspegel sind den technischen Datenblättern der Hersteller zu entnehmen. 
+          Wichtig: Verwenden Sie den <strong>maximalen Schallleistungspegel L<sub>W,A,max</sub></strong> im jeweiligen Betriebsmodus, 
+          nicht den auf dem ErP-Label angegebenen Wert, der unter Normbedingungen ermittelt wird.</p>
+          
+          <p style="margin-top: 10px;">Die in der Gerätedatenbank hinterlegten Beispielwerte sind typische Richtwerte 
+          und ersetzen keine Herstellerangaben.</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Rechtlicher Hinweis</div>
+          <p>Die Nutzung dieses Rechners erfolgt auf eigene Verantwortung. Die Entwickler übernehmen keine Haftung 
+          für die Richtigkeit der Berechnungen oder für Schäden, die durch die Verwendung der Ergebnisse entstehen.</p>
+          
+          <p style="margin-top: 10px;">Die Einhaltung der gesetzlichen und behördlichen Anforderungen zum Schallschutz 
+          liegt in der Verantwortung des Bauherrn bzw. Anlagenbetreibers.</p>
+        </div>
+
+        <div class="info-box">
+          <strong>Version:</strong> 1.0 (Dezember 2024)<br>
+          <strong>Grundlage:</strong> OIB-Richtlinie 5 (Mai 2023), TA Lärm, ÖNORM B 8115-2<br>
+          <strong>Entwickelt für:</strong> Überschlägige Planungszwecke
+        </div>
+      </div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="info-card">
+        <h3>📋 Schnellanleitung</h3>
+        <ul>
+          <li>Wählen Sie ein Beispielgerät oder geben Sie die Schallleistungspegel manuell ein</li>
+          <li>Wählen Sie die Empfindlichkeitsstufe des Standorts</li>
+          <li>Geben Sie die Aufstellungssituation und Abstände ein</li>
+          <li>Optional: Berücksichtigen Sie Schallschutzmaßnahmen</li>
+          <li>Klicken Sie auf "Berechnung durchführen"</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>⚖️ Immissionsrichtwerte</h3>
+        <p style="font-size: 13px; color: #666; margin-bottom: 10px;">
+          Gemäß OIB-RL 5, Punkt 5.2:
+        </p>
+        <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
+          <tr style="background: #f8f9fa;">
+            <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Zeit</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 1px solid #ddd;">Kat. 1</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 1px solid #ddd;">Kat. 2</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 1px solid #ddd;">Kat. 3</th>
+          </tr>
+          <tr>
+            <td style="padding: 8px;">Tag</td>
+            <td style="padding: 8px; text-align: center;">40</td>
+            <td style="padding: 8px; text-align: center;">45</td>
+            <td style="padding: 8px; text-align: center;">50</td>
+          </tr>
+          <tr style="background: #f8f9fa;">
+            <td style="padding: 8px;">Abend</td>
+            <td style="padding: 8px; text-align: center;">35</td>
+            <td style="padding: 8px; text-align: center;">40</td>
+            <td style="padding: 8px; text-align: center;">45</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px;">Nacht</td>
+            <td style="padding: 8px; text-align: center;">30</td>
+            <td style="padding: 8px; text-align: center;">35</td>
+            <td style="padding: 8px; text-align: center;">40</td>
+          </tr>
+        </table>
+        <p style="font-size: 11px; color: #999; margin-top: 10px;">
+          Alle Angaben in dB(A)
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h3>💡 Tipps zur Schallreduktion</h3>
+        <ul style="font-size: 13px;">
+          <li>Größtmöglichen Abstand wählen</li>
+          <li>Schallabgewandte Seite nutzen</li>
+          <li>Nachtabsenkung aktivieren</li>
+          <li>Körperschallentkopplung vorsehen</li>
+          <li>Bei Bedarf Schallschutzwand errichten</li>
+        </ul>
+      </div>
+    </aside>
   </div>
 
-  <button type="button" id="calculateBtn">Berechnung durchführen</button>
-
-  <div id="result"></div>
-
-  <div class="info-box">
-    <strong>Hinweis:</strong> Die Ergebnisse basieren auf dem überschlägigen Prognoseverfahren der TA Lärm. 
-    Im Falle eines Nachbarschaftsstreits kann dies kein individuelles Schallgutachten ersetzen.
-  </div>
+  <footer>
+    <p><strong>Wichtiger Hinweis:</strong> Dieser Rechner dient ausschließlich der überschlägigen Planung und 
+    ersetzt kein Schallgutachten durch einen befugten Sachverständigen.</p>
+    <p style="margin-top: 10px; font-size: 12px;">
+      Grundlage: OIB-Richtlinie 5 (Mai 2023), TA Lärm | © 2024
+    </p>
+  </footer>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-  const btn = document.getElementById("calculateBtn");
-  const resultDiv = document.getElementById("result");
+// ============================================================================
+// GLOBAL STATE
+// ============================================================================
+const deviceDatabase = {
+  'db1': { name: 'Luft-WP 6 kW', lw_day: 58, lw_night: 53 },
+  'db2': { name: 'Luft-WP 10 kW', lw_day: 62, lw_night: 57 },
+  'db3': { name: 'Luft-WP 15 kW', lw_day: 65, lw_night: 60 },
+  'db4': { name: 'Luft-WP 20 kW', lw_day: 67, lw_night: 62 }
+};
 
-  // Add visual feedback for radio selections
-  document.querySelectorAll('.radio-option').forEach(option => {
-    option.addEventListener('click', function() {
-      const radio = this.querySelector('input[type="radio"]');
-      radio.checked = true;
-      
-      document.querySelectorAll('.radio-option').forEach(opt => {
-        opt.classList.remove('selected');
-      });
-      this.classList.add('selected');
-    });
+// ============================================================================
+// PAGE NAVIGATION
+// ============================================================================
+function showPage(pageName) {
+  // Hide all pages
+  document.querySelectorAll('.page-content').forEach(page => {
+    page.style.display = 'none';
   });
-
-  // Set initial selected state
-  document.querySelector('input[name="sensitivity"]:checked').closest('.radio-option').classList.add('selected');
-
-  // K0 diagram update function
-  function updateK0Diagram() {
-    const k0Select = document.getElementById('k0');
-    const diagramDiv = document.getElementById('k0-diagram');
-    const selectedIndex = k0Select.selectedIndex;
-    
-    const diagrams = [
-      // Free standing (+3 dB)
-      `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
-        <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">Frei aufgestellt (+3 dB)</text>
-        <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
-        <text x="150" y="195" text-anchor="middle" font-size="12" fill="#666">Boden</text>
-        <rect x="125" y="110" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
-        <text x="150" y="145" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
-        <circle cx="150" cy="140" r="3" fill="#ffeb3b"/>
-        <path d="M 150 140 L 110 100 M 150 140 L 190 100 M 150 140 L 110 180 M 150 140 L 190 180" 
-              stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3"/>
-        <text x="150" y="65" text-anchor="middle" font-size="11" fill="#666">Abstand > 3m zu allen Wänden</text>
-      </svg>`,
-      
-      // At wall (+6 dB)
-      `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
-        <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">An einer Wand (+6 dB)</text>
-        <rect x="30" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
-        <text x="20" y="115" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-90 20 115)">Wand</text>
-        <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
-        <text x="150" y="195" text-anchor="middle" font-size="12" fill="#666">Boden</text>
-        <rect x="50" y="110" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
-        <text x="75" y="145" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
-        <circle cx="75" cy="140" r="3" fill="#ffeb3b"/>
-        <path d="M 75 140 L 115 100 M 75 140 L 115 180 M 75 140 L 35 110 M 75 140 L 35 170" 
-              stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3"/>
-        <line x1="75" y1="100" x2="75" y2="85" stroke="#d32f2f" stroke-width="2" marker-end="url(#arrowhead)"/>
-        <line x1="40" y1="100" x2="40" y2="85" stroke="#d32f2f" stroke-width="2" marker-start="url(#arrowhead)"/>
-        <text x="57" y="80" text-anchor="middle" font-size="10" fill="#d32f2f">≤ 3m</text>
-        <defs>
-          <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
-            <polygon points="0 0, 10 5, 0 10" fill="#d32f2f"/>
-          </marker>
-        </defs>
-      </svg>`,
-      
-      // In corner (+9 dB)
-      `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
-        <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">In einer Ecke (+9 dB)</text>
-        <rect x="30" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
-        <rect x="40" y="50" width="80" height="10" fill="#999" stroke="#666" stroke-width="2"/>
-        <text x="20" y="115" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-90 20 115)">Wand</text>
-        <text x="80" y="45" text-anchor="middle" font-size="11" fill="#666">Wand</text>
-        <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
-        <text x="150" y="195" text-anchor="middle" font-size="12" fill="#666">Boden</text>
-        <rect x="50" y="70" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
-        <text x="75" y="105" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
-        <circle cx="75" cy="100" r="3" fill="#ffeb3b"/>
-        <path d="M 75 100 L 115 80 M 75 100 L 115 120 M 75 100 L 35 60 M 75 100 L 55 60" 
-              stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3"/>
-        <text x="150" y="160" text-anchor="middle" font-size="10" fill="#666">Abstand zu beiden Wänden ≤ 3m</text>
-      </svg>`,
-      
-      // Between two walls (+9 dB)
-      `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
-        <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">Zwischen zwei Wänden (+9 dB)</text>
-        <rect x="30" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
-        <rect x="220" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
-        <text x="20" y="115" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-90 20 115)">Wand</text>
-        <text x="240" y="115" text-anchor="middle" font-size="11" fill="#666" transform="rotate(-90 240 115)">Wand</text>
-        <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
-        <text x="150" y="195" text-anchor="middle" font-size="12" fill="#666">Boden</text>
-        <rect x="125" y="110" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
-        <text x="150" y="145" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
-        <circle cx="150" cy="140" r="3" fill="#ffeb3b"/>
-        <path d="M 150 140 L 110 100 M 150 140 L 190 100 M 150 140 L 110 180 M 150 140 L 190 180" 
-              stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3"/>
-        <line x1="40" y1="65" x2="60" y2="65" stroke="#d32f2f" stroke-width="2" marker-end="url(#arrowhead2)"/>
-        <line x1="220" y1="65" x2="200" y2="65" stroke="#d32f2f" stroke-width="2" marker-start="url(#arrowhead2)"/>
-        <text x="130" y="60" text-anchor="middle" font-size="10" fill="#d32f2f">Abstand ≤ 5m</text>
-        <defs>
-          <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
-            <polygon points="0 0, 10 5, 0 10" fill="#d32f2f"/>
-          </marker>
-        </defs>
-      </svg>`,
-      
-      // Under canopy (+9 dB)
-      `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
-        <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">Unter Vordach (+9 dB)</text>
-        <rect x="30" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
-        <rect x="40" y="70" width="140" height="8" fill="#888" stroke="#666" stroke-width="2"/>
-        <line x1="40" y1="78" x2="40" y2="74" stroke="#666" stroke-width="1"/>
-        <line x1="180" y1="78" x2="180" y2="74" stroke="#666" stroke-width="1"/>
-        <text x="110" y="65" text-anchor="middle" font-size="11" fill="#666">Vordach</text>
-        <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
-        <text x="150" y="195" text-anchor="middle" font-size="12" fill="#666">Boden</text>
-        <rect x="85" y="110" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
-        <text x="110" y="145" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
-        <circle cx="110" cy="140" r="3" fill="#ffeb3b"/>
-        <path d="M 110 140 L 80 100 M 110 140 L 140 100 M 110 140 L 80 170 M 110 140 L 140 170" 
-              stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3"/>
-        <line x1="110" y1="78" x2="110" y2="95" stroke="#d32f2f" stroke-width="2" marker-end="url(#arrowhead3)"/>
-        <text x="125" y="90" text-anchor="start" font-size="10" fill="#d32f2f">≤ 5m</text>
-        <defs>
-          <marker id="arrowhead3" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
-            <polygon points="0 0, 10 5, 0 10" fill="#d32f2f"/>
-          </marker>
-        </defs>
-      </svg>`
-    ];
-    
-    diagramDiv.innerHTML = diagrams[selectedIndex];
-  }
-
-  // Update diagram on page load and when selection changes
-  updateK0Diagram();
-  document.getElementById('k0').addEventListener('change', updateK0Diagram);
-
-  function getLimits() {
-    const sensitivity = document.querySelector('input[name="sensitivity"]:checked').value;
-    const limits = {
-      'kategorie1': { day: 40, evening: 35, night: 30 },
-      'kategorie2': { day: 45, evening: 40, night: 35 },
-      'kategorie3': { day: 50, evening: 45, night: 40 }
-    };
-    return limits[sensitivity];
-  }
-
-  function calculate() {
-    // Get input values
-    const Lw_day = parseFloat(document.getElementById("lw_day").value);
-    const Lw_night = parseFloat(document.getElementById("lw_night").value);
-    const tone_day = parseFloat(document.getElementById("tone_day").value);
-    const tone_night = parseFloat(document.getElementById("tone_night").value);
-    const K0 = parseFloat(document.getElementById("k0").value);
-    const r = parseFloat(document.getElementById("distance").value);
-
-    // Validate inputs
-    if (isNaN(Lw_day) || isNaN(Lw_night) || isNaN(r) || r <= 0) {
-      resultDiv.className = "show";
-      resultDiv.innerHTML = '<div class="error">⚠️ Bitte gültige Werte eingeben.</div>';
-      return;
-    }
-
-    // Calculate according to TA Lärm
-    // Lp = Lw + K0 - 20*log10(r) - 11
-    const Lp_day = Lw_day + K0 - 20 * Math.log10(r) - 11 + tone_day;
-    const Lp_evening = Lw_day + K0 - 20 * Math.log10(r) - 11 + tone_day; // Evening uses day values
-    const Lp_night = Lw_night + K0 - 20 * Math.log10(r) - 11 + tone_night;
-
-    // Get limits
-    const limits = getLimits();
-    
-    // Compare with limits
-    const dayDiff = Lp_day - limits.day;
-    const eveningDiff = Lp_evening - limits.evening;
-    const nightDiff = Lp_night - limits.night;
-    
-    const dayCompliant = Lp_day <= limits.day;
-    const eveningCompliant = Lp_evening <= limits.evening;
-    const nightCompliant = Lp_night <= limits.night;
-    const overallCompliant = dayCompliant && eveningCompliant && nightCompliant;
-
-    // Create result HTML
-    let resultHTML = '<div class="result-section">';
-    resultHTML += '<div class="result-header">📊 Berechnungsergebnisse</div>';
-    
-    resultHTML += '<div class="result-grid">';
-    
-    // Day result
-    resultHTML += '<div class="result-item">';
-    resultHTML += '<div class="result-label">Beurteilungspegel Tag</div>';
-    resultHTML += `<div class="result-value">${Lp_day.toFixed(1)} dB(A)</div>`;
-    resultHTML += `<div class="result-label" style="margin-top: 10px; color: ${dayCompliant ? '#155724' : '#721c24'}">`;
-    resultHTML += `Grenzwert: ${limits.day} dB(A)<br>`;
-    resultHTML += dayCompliant 
-      ? `✓ ${Math.abs(dayDiff).toFixed(1)} dB unter Grenzwert`
-      : `⚠ ${Math.abs(dayDiff).toFixed(1)} dB über Grenzwert`;
-    resultHTML += '</div></div>';
-    
-    // Evening result
-    resultHTML += '<div class="result-item">';
-    resultHTML += '<div class="result-label">Beurteilungspegel Abend</div>';
-    resultHTML += `<div class="result-value">${Lp_evening.toFixed(1)} dB(A)</div>`;
-    resultHTML += `<div class="result-label" style="margin-top: 10px; color: ${eveningCompliant ? '#155724' : '#721c24'}">`;
-    resultHTML += `Grenzwert: ${limits.evening} dB(A)<br>`;
-    resultHTML += eveningCompliant 
-      ? `✓ ${Math.abs(eveningDiff).toFixed(1)} dB unter Grenzwert`
-      : `⚠ ${Math.abs(eveningDiff).toFixed(1)} dB über Grenzwert`;
-    resultHTML += '</div></div>';
-    
-    // Night result
-    resultHTML += '<div class="result-item">';
-    resultHTML += '<div class="result-label">Beurteilungspegel Nacht</div>';
-    resultHTML += `<div class="result-value">${Lp_night.toFixed(1)} dB(A)</div>`;
-    resultHTML += `<div class="result-label" style="margin-top: 10px; color: ${nightCompliant ? '#155724' : '#721c24'}">`;
-    resultHTML += `Grenzwert: ${limits.night} dB(A)<br>`;
-    resultHTML += nightCompliant 
-      ? `✓ ${Math.abs(nightDiff).toFixed(1)} dB unter Grenzwert`
-      : `⚠ ${Math.abs(nightDiff).toFixed(1)} dB über Grenzwert`;
-    resultHTML += '</div></div>';
-    
-    resultHTML += '</div>'; // end result-grid
-    
-    // Overall compliance
-    const comparisonClass = overallCompliant ? 'comparison-below' : 'comparison-above';
-    const comparisonIcon = overallCompliant ? '✓' : '⚠️';
-    const comparisonText = overallCompliant 
-      ? 'Alle Immissionsrichtwerte werden eingehalten.'
-      : 'Mindestens ein Beurteilungspegel liegt über dem Immissionsrichtwert.';
-    
-    resultHTML += `<div class="comparison-box ${comparisonClass}">`;
-    resultHTML += `${comparisonIcon} ${comparisonText}`;
-    resultHTML += '</div>';
-    
-    // Calculation details
-    resultHTML += '<div class="info-box" style="text-align: left;">';
-    resultHTML += '<strong>Berechnungsformel:</strong> Lp = Lw + K₀ - 20·log₁₀(r) - 11 + KT<br>';
-    resultHTML += `<strong>Parameter:</strong><br>`;
-    resultHTML += `• Abstand: ${r} m<br>`;
-    resultHTML += `• Raumwinkelmaß K₀: +${K0} dB<br>`;
-    resultHTML += `• Tonhaltigkeitszuschlag Tag: +${tone_day} dB<br>`;
-    resultHTML += `• Tonhaltigkeitszuschlag Nacht: +${tone_night} dB`;
-    resultHTML += '</div>';
-    
-    resultHTML += '</div>'; // end result-section
-
-    resultDiv.className = "show";
-    resultDiv.innerHTML = resultHTML;
-  }
-
-  btn.addEventListener("click", calculate);
-
-  // Enter key support
-  document.querySelectorAll('input').forEach(input => {
-    input.addEventListener("keypress", function(e) {
-      if (e.key === "Enter") calculate();
-    });
+  
+  // Show selected page
+  document.getElementById('page-' + pageName).style.display = 'block';
+  
+  // Update nav buttons
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.classList.remove('active');
   });
-});
-</script>
-</body>
-</html>
+  event.target.classList.add('active');
+  
+  // Hide sidebar on non-calculator pages
+  const wrapper = document.querySelector('.content-wrapper');
+  if (pageName === 'calculator') {
+    wrapper.classList.add('with-sidebar');
+  } else {
+    wrapper.classList.remove('with-sidebar');
+  }
+}
+
+// ============================================================================
+// DEVICE DATABASE
+// ============================================================================
+function loadDeviceData() {
+  const select = document.getElementById('device_database');
+  const deviceKey = select.value;
+  
+  if (deviceKey && deviceDatabase[deviceKey]) {
+    const device = deviceDatabase[deviceKey];
+    document.getElementById('lw_day').value = device.lw_day;
+    document.getElementById('lw_night').value = device.lw_night;
+  }
+}
+
+// ============================================================================
+// K0 DIAGRAM UPDATES
+// ============================================================================
+function updateK0Diagram() {
+  const k0Select = document.getElementById('k0');
+  const diagramDiv = document.getElementById('k0-diagram');
+  const selectedValue = k0Select.value;
+  
+  const diagrams = {
+    '3': `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
+      <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">Frei aufgestellt (K₀ = +3 dB)</text>
+      <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
+      <text x="150" y="195" text-anchor="middle" font-size="12" fill="#666">Boden</text>
+      <rect x="125" y="110" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
+      <text x="150" y="145" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
+      <circle cx="150" cy="140" r="3" fill="#ffeb3b"/>
+      <path d="M 150 140 L 110 100 M 150 140 L 190 100 M 150 140 L 110 180 M 150 140 L 190 180" 
+            stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3" opacity="0.8"/>
+      <text x="150" y="65" text-anchor="middle" font-size="11" fill="#666">Abstand > 3m zu allen Wänden</text>
+    </svg>`,
+    
+    '6': `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
+      <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">An einer Wand (K₀ = +6 dB)</text>
+      <rect x="30" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
+      <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
+      <rect x="50" y="110" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
+      <text x="75" y="145" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
+      <circle cx="75" cy="140" r="3" fill="#ffeb3b"/>
+      <path d="M 75 140 L 115 100 M 75 140 L 115 180" stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3" opacity="0.8"/>
+      <line x1="75" y1="95" x2="75" y2="80" stroke="#d32f2f" stroke-width="2"/>
+      <line x1="40" y1="95" x2="40" y2="80" stroke="#d32f2f" stroke-width="2"/>
+      <text x="57" y="75" text-anchor="middle" font-size="10" fill="#d32f2f" font-weight="bold">≤ 3m</text>
+    </svg>`,
+    
+    '9': `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
+      <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">In einer Ecke (K₀ = +9 dB)</text>
+      <rect x="30" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
+      <rect x="40" y="50" width="80" height="10" fill="#999" stroke="#666" stroke-width="2"/>
+      <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
+      <rect x="50" y="70" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
+      <text x="75" y="105" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
+      <circle cx="75" cy="100" r="3" fill="#ffeb3b"/>
+      <path d="M 75 100 L 115 80 M 75 100 L 115 120" stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3" opacity="0.8"/>
+      <text x="150" y="160" text-anchor="middle" font-size="10" fill="#666">Abstände ≤ 3m</text>
+    </svg>`,
+    
+    '9.5': `<svg viewBox="0 0 300 200" style="max-width: 300px; display: block; margin: 0 auto;">
+      <text x="150" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">Zwischen zwei Wänden (K₀ = +9 dB)</text>
+      <rect x="30" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
+      <rect x="220" y="50" width="10" height="130" fill="#999" stroke="#666" stroke-width="2"/>
+      <line x1="50" y1="180" x2="250" y2="180" stroke="#666" stroke-width="2"/>
+      <rect x="125" y="110" width="50" height="60" fill="#4a7c3b" stroke="#2d5a24" stroke-width="2"/>
+      <text x="150" y="145" text-anchor="middle" font-size="11" fill="white" font-weight="bold">WP</text>
+      <circle cx="150" cy="140" r="3" fill="#ffeb3b"/>
+      <path d="M 150 140 L 110 100 M 150 140 L 190 100" stroke="#ffeb3b" stroke-width="2" stroke-dasharray="3,3" opacity="0.8"/>
+      <line x1="40" y1="65" x2="60" y2="65" stroke="#d32f2f" stroke-width="2"/>
+      <line x1="220" y1="65" x2="200" y2="65" stroke="#d32f2f" stroke-width="2"/>
+      <text x="130" y="60" text-anchor="middle" font-size="10" fill="#d32f2f" font-weight="bold">≤ 5m</text>
+    </svg
