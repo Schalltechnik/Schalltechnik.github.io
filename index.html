@@ -325,17 +325,23 @@ footer p{max-width:1160px;margin:0 auto;padding:14px 24px;font-size:.8125rem;col
       <div class="seg" role="radiogroup" aria-labelledby="kday_lbl">
         <label><input type="radio" name="k_day" value="5" checked>+5 dB</label>
         <label><input type="radio" name="k_day" value="3">+3 dB</label>
+        <label><input type="radio" name="k_day" value="0">0 dB</label>
       </div>
       <span class="lbl" id="kngt_lbl" style="margin:0">Nacht</span>
       <div class="seg" role="radiogroup" aria-labelledby="kngt_lbl">
         <label><input type="radio" name="k_ngt" value="5" checked>+5 dB</label>
         <label><input type="radio" name="k_ngt" value="3">+3 dB</label>
+        <label><input type="radio" name="k_ngt" value="0">0 dB</label>
       </div>
     </div>
-    <p class="kdesc" style="margin-top:12px"><b>+5 dB (Standard):</b> Tonhaltigkeit, Richtwirkung und Prognoseunsicherheit.<br><b>+3 dB:</b> nur Tonhaltigkeit – zulässig, wenn eine Richtwirkung zur Grundgrenze ausgeschlossen werden kann.</p>
+    <p class="kdesc" style="margin-top:12px"><b>+5 dB (Standard):</b> Tonhaltigkeit, Richtwirkung und Prognoseunsicherheit.<br><b>+3 dB:</b> nur Tonhaltigkeit – zulässig, wenn eine Richtwirkung zur Grundgrenze ausgeschlossen werden kann.<br><b>0 dB:</b> kein Zuschlag – nur wenn Tonhaltigkeit und Richtwirkung nachweislich ausgeschlossen sind. Das Ergebnis entspricht dann der Tabelle im Infoblatt.</p>
     <div class="sub" id="dir_box" hidden>
       <label class="check" style="margin-top:6px"><input type="checkbox" id="dir_ok"><span>Die Luftaustrittsseite des Geräts ist nicht zur relevanten Grundgrenze gerichtet.<small>Bestätigung erforderlich, damit +3 dB angesetzt werden.</small></span></label>
       <p class="err" id="dir_err" hidden></p>
+    </div>
+    <div class="sub" id="zero_box" hidden>
+      <label class="check" style="margin-top:6px"><input type="checkbox" id="zero_ok"><span>Tonale Geräuschanteile und eine Richtwirkung zur relevanten Grundgrenze sind nachweislich ausgeschlossen.<small>Z. B. durch Herstellerangaben zur Tonhaltigkeit und Richtcharakteristik oder durch eine Messung. Bestätigung erforderlich, damit 0 dB angesetzt werden.</small></span></label>
+      <p class="err" id="zero_err" hidden></p>
     </div>
   </fieldset>
 
@@ -453,7 +459,7 @@ footer p{max-width:1160px;margin:0 auto;padding:14px 24px;font-size:.8125rem;col
     <li><b>Richtwirkung:</b> Der Schallleistungspegel ist ein über alle Richtungen gemittelter Wert. Auf der Luftaustrittsseite kann der Pegel mehrere Dezibel höher liegen.</li>
     <li><b>Pegelschwankungen und Unsicherheiten:</b> Drehzahländerungen, Abtauvorgänge, Messunsicherheit der Herstellerangabe und die Vereinfachungen des Rechenmodells.</li>
   </ul>
-  <p>Der Standardzuschlag von 5 dB setzt sich zusammen aus 3 dB für Tonhaltigkeit und rund 2 dB für Richtwirkung und Prognoseunsicherheit. Kann eine Richtwirkung zur Grundgrenze ausgeschlossen werden, darf mit 3 dB gerechnet werden – für Tag/Abend und Nacht getrennt wählbar.</p>
+  <p>Der Standardzuschlag von 5 dB setzt sich zusammen aus 3 dB für Tonhaltigkeit und rund 2 dB für Richtwirkung und Prognoseunsicherheit. Kann eine Richtwirkung zur Grundgrenze ausgeschlossen werden, darf mit 3 dB gerechnet werden – für Tag/Abend und Nacht getrennt wählbar. Nur wenn Tonhaltigkeit und Richtwirkung nachweislich ausgeschlossen sind (z. B. durch Herstellerangaben oder eine Messung), kann auf den Zuschlag verzichtet werden (0 dB); beide Stufen fallen dann zusammen.</p>
   <p>Anschaulich wird der Zuschlag, wenn man betrachtet, wie stark ein Gerät den bestehenden Basispegel an der Grenze anhebt:</p>
   <div class="tbl-wrap" style="max-width:520px"><table>
     <thead><tr><th>Gerätepegel relativ zum Planungsbasispegel</th><th>Anhebung des Basispegels</th></tr></thead>
@@ -518,7 +524,7 @@ footer p{max-width:1160px;margin:0 auto;padding:14px 24px;font-size:.8125rem;col
    Nach der BauG-Novelle / Verordnung nur diesen Block (und die Texte) anpassen.
    ═══════════════════════════════════════════════════════════════════════ */
 const CONFIG = {
-  version: "Version 0.9 (Testversion, September 2026)",
+  version: "Version 0.9.1 (Testversion, September 2026)",
   rechtsstand: "Stmk. Baugesetz idF LGBl. Nr. 20/2026; Infoblatt Abt. 15 „Wärmepumpen und Geräte mit fester Aufstellung im Freibereich“, V2-2026",
   perioden: {
     day: {kurz:"Tag",   lang:"Tag (06–19 Uhr)"},
@@ -541,7 +547,7 @@ const CONFIG = {
     ecke:   {k0:9, titel:"In einer Ecke",          text:"Zwei Wände im Abstand von je bis 3 m"},
     nische: {k0:9, titel:"Zwischen zwei Wänden",   text:"Gegenüberliegende Wände, Abstand bis 5 m"}
   },
-  zuschlag: {standard:5, tonal:3}
+  zuschlag: {standard:5, tonal:3, keiner:0}
 };
 
 /* ── Hilfsfunktionen ─────────────────────────────────────────────────── */
@@ -736,6 +742,9 @@ function readState(){
   s.K.eve = s.K.day;
   s.needDir = s.K.day === CONFIG.zuschlag.tonal || (s.op.ngt && s.K.ngt === CONFIG.zuschlag.tonal);
   s.dirOk = $("dir_ok").checked;
+  s.needZero = s.K.day === CONFIG.zuschlag.keiner || (s.op.ngt && s.K.ngt === CONFIG.zuschlag.keiner);
+  s.zeroOk = $("zero_ok").checked;
+  if (s.needZero && !s.zeroOk) s.errs.zero = "Für 0 dB bitte bestätigen, dass Tonhaltigkeit und Richtwirkung nachweislich ausgeschlossen sind – oder einen Zuschlag wählen.";
   if (s.needDir && !s.dirOk) s.errs.dir = "Für +3 dB bitte bestätigen, dass die Luftaustrittsseite nicht zur Grundgrenze gerichtet ist – oder +5 dB wählen.";
 
   s.gst = $("gst").value.trim(); s.kg = $("kg").value.trim();
@@ -771,7 +780,7 @@ function compute(s){
 /* ── Darstellung ─────────────────────────────────────────────────────── */
 const VERDICT = {
   pass:{chip:"Empfehlung erfüllt", titel:"Empfehlung erfüllt",
-    text:"Der Planungsbasispegel wird in allen Beurteilungszeiträumen eingehalten – auch unter Berücksichtigung des Zuschlags für Geräuschcharakteristik."},
+    text:"Der Planungsbasispegel wird in allen Beurteilungszeiträumen eingehalten – auch unter Berücksichtigung des gewählten Zuschlags für Geräuschcharakteristik."},
   caution:{chip:"PBP eingehalten", titel:"Planungsbasispegel eingehalten – Empfehlung nicht erfüllt",
     text:"Rechnerisch wird der Planungsbasispegel an der relevanten Grundgrenze eingehalten. Mit dem Zuschlag für Geräuschcharakteristik wird er jedoch in mindestens einem Zeitraum überschritten. Tonale oder gerichtete Geräuschanteile können in der Nachbarschaft als störend wahrgenommen werden; eine Verbesserung der Aufstellung wird empfohlen."},
   fail:{chip:"PBP überschritten", titel:"Planungsbasispegel überschritten",
@@ -791,6 +800,7 @@ function renderFieldMessages(s){
   const behShow = !!s.errs.beh && ["beh_day","beh_eve","beh_ngt"].some(i => touched.has(i));
   $("beh_err").hidden = !behShow; $("beh_err").textContent = behShow ? s.errs.beh : "";
   $("dir_err").hidden = !s.errs.dir; $("dir_err").textContent = s.errs.dir || "";
+  $("zero_err").hidden = !s.errs.zero; $("zero_err").textContent = s.errs.zero || "";
 }
 
 function syncUI(){
@@ -801,6 +811,7 @@ function syncUI(){
   $("beh_box").hidden = key !== "BEH";
   const needDir = radioVal("k_day") === "3" || ($("op_ngt").checked && radioVal("k_ngt") === "3");
   $("dir_box").hidden = !needDir;
+  $("zero_box").hidden = !(radioVal("k_day") === "0" || ($("op_ngt").checked && radioVal("k_ngt") === "0"));
   if (key !== "BEH"){
     const w = CONFIG.widmungen[key];
     $("pbp_line").innerHTML = `Maßgebender Planungsbasispegel: Tag ${w.day} dB, Abend ${w.eve} dB, Nacht ${w.ngt} dB.`;
@@ -873,7 +884,7 @@ function calcPathHTML(s, r){
 function renderIncomplete(s){
   $("verdict").className = "verdict pending";
   const labels = {lw_max:"Schallleistungspegel", lw_red:"Wert im schallreduzierten Betrieb", n_units:"Anzahl der Geräte",
-    dlm:"Pegelminderung", dist:"Abstand zur relevanten Grundgrenze", beh:"Planungsbasispegel laut Baubehörde", dir:"Bestätigung zur Luftaustrittsseite"};
+    dlm:"Pegelminderung", dist:"Abstand zur relevanten Grundgrenze", beh:"Planungsbasispegel laut Baubehörde", dir:"Bestätigung zur Luftaustrittsseite", zero:"Bestätigung für 0 dB"};
   $("verdict").innerHTML = `<h3>Für die Berechnung fehlen noch Angaben</h3><ul>${Object.keys(s.errs).map(k => `<li>${labels[k]}: ${esc(s.errs[k])}</li>`).join("")}</ul>`;
   $("tbl_wrap").hidden = true; $("details_row").hidden = true;
 }
@@ -910,7 +921,7 @@ function buildReport(s, r){
     ["Widmung", esc(s.widmText)],
     ["Planungsbasispegel Tag / Abend / Nacht", `${fmt(s.pbp.day,0)} / ${fmt(s.pbp.eve,0)} / ${fmt(s.pbp.ngt,0)} dB`],
     ["Betriebszeiten", ["Tag", s.op.eve ? "Abend" : "", s.op.ngt ? "Nacht" : ""].filter(Boolean).join(", ")],
-    ["Zuschlag K<sub>G</sub> Tag/Abend / Nacht", `+${s.K.day} dB / +${s.K.ngt} dB${s.needDir ? " (Luftaustritt nicht zur Grundgrenze gerichtet – bestätigt)" : ""}`]
+    ["Zuschlag K<sub>G</sub> Tag/Abend / Nacht", `+${s.K.day} dB / +${s.K.ngt} dB${s.needDir ? "; Luftaustritt nicht zur Grundgrenze gerichtet – bestätigt" : ""}${s.needZero ? "; Tonhaltigkeit und Richtwirkung nachweislich ausgeschlossen – bestätigt" : ""}`]
   ];
   const v = VERDICT[r.state];
   $("print-report").innerHTML = `
